@@ -35,7 +35,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (PersistenceException ignored) {
             session.getTransaction().rollback();
         }
-
     }
 
     @Override
@@ -48,7 +47,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (PersistenceException ignored) {
             session.getTransaction().rollback();
         }
-
     }
 
     @Override
@@ -62,7 +60,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Throwable e) {
             session.getTransaction().rollback();
         }
-        
     }
 
     @Override
@@ -76,7 +73,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Throwable e) {
             session.getTransaction().rollback();
         }
-
     }
 
     @Override
