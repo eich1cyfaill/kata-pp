@@ -13,78 +13,85 @@ import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
 
-    private SessionFactory sessionFactory = null;
+    private final SessionFactory sessionFactory = Util.buildSessionFactory();
     private Session session = null;
 
     public UserDaoHibernateImpl() {
 
     }
 
-    {
-        sessionFactory = Util.buildSessionFactory();
-    }
-
-
     @Override
     public void createUsersTable() {
         try {
-            session = sessionFactory.getCurrentSession();
+            session = sessionFactory.openSession();
             session.beginTransaction();
-            session.createNativeQuery("CREATE TABLE users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(40), last_name VARCHAR(40), age TINYINT)").executeUpdate();
+            session.createNativeQuery("CREATE TABLE users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(40), last_name VARCHAR(40), age TINYINT)")
+                    .executeUpdate();
             session.getTransaction().commit();
+            session.close();
         } catch (PersistenceException ignored) {
             session.getTransaction().rollback();
+            session.close();
         }
     }
 
     @Override
     public void dropUsersTable() {
         try {
-            session = sessionFactory.getCurrentSession();
+            session = sessionFactory.openSession();
             session.beginTransaction();
-            session.createNativeQuery("DROP TABLE IF EXISTS users").executeUpdate();
+            session.createNativeQuery("DROP TABLE IF EXISTS users")
+                    .executeUpdate();
             session.getTransaction().commit();
+            session.close();
         } catch (PersistenceException ignored) {
             session.getTransaction().rollback();
+            session.close();
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
         try {
-            session = sessionFactory.getCurrentSession();
+            session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(new User(name, lastName, age));
             session.getTransaction().commit();
+            session.close();
             System.out.printf("User с именем - %s добавлен в базу данных \n", name);
         } catch (Throwable e) {
             session.getTransaction().rollback();
+            session.close();
         }
     }
 
     @Override
     public void removeUserById(long id) {
         try {
-            session = sessionFactory.getCurrentSession();
+            session = sessionFactory.openSession();
             session.beginTransaction();
             User user = session.get(User.class, id);
             session.delete(user);
             session.getTransaction().commit();
+            session.close();
         } catch (Throwable e) {
             session.getTransaction().rollback();
+            session.close();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> list = null;
+        List<User> list = new ArrayList<>();
         try {
-            session = sessionFactory.getCurrentSession();
+            session = sessionFactory.openSession();
             session.beginTransaction();
-            list = session.createQuery("SELECT i FROM User i", User.class).getResultList();
+            list = session.createQuery("SELECT u FROM User u", User.class).getResultList();
             session.getTransaction().commit();
+            session.close();
         } catch (Throwable e) {
             session.getTransaction().rollback();
+            session.close();
         }
         return list;
     }
@@ -92,12 +99,15 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         try {
-            session = sessionFactory.getCurrentSession();
+            session = sessionFactory.openSession();
             session.beginTransaction();
-            session.createQuery("DELETE FROM User").executeUpdate();
+            session.createQuery("DELETE FROM User")
+                    .executeUpdate();
             session.getTransaction().commit();
+            session.close();
         } catch (Throwable e) {
             session.getTransaction().rollback();
+            session.close();
         }
     }
 }

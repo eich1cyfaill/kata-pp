@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-
+    private static SessionFactory sessionFactory;
     private static final String dbUrl = "jdbc:mysql://localhost:3306/katapp";
     private static final String dbUsername = "root";
     private static final String dbPassword = "root";
@@ -32,9 +32,11 @@ public class Util {
         properties.put(Environment.HBM2DDL_AUTO, "none");
         properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
-        return new Configuration().setProperties(properties)
-                .addAnnotatedClass(User.class)
-                .buildSessionFactory();
+        if (sessionFactory == null) {
+            sessionFactory = new Configuration().setProperties(properties)
+                    .addAnnotatedClass(User.class)
+                    .buildSessionFactory();
+        }
+        return sessionFactory;
     }
-
 }
