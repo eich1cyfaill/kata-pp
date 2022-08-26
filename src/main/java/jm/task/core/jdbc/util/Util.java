@@ -22,17 +22,17 @@ public class Util {
     }
 
     public static SessionFactory buildSessionFactory() {
-        Properties properties = new Properties();
-        properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-        properties.put(Environment.URL, "jdbc:mysql://localhost:3306/katapp");
-        properties.put(Environment.USER, "root");
-        properties.put(Environment.PASS, "root");
-        properties.put(Environment.FORMAT_SQL, "true");
-        properties.put(Environment.SHOW_SQL, "true");
-        properties.put(Environment.HBM2DDL_AUTO, "none");
-        properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
         if (sessionFactory == null) {
+            Properties properties = new Properties();
+            properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+            properties.put(Environment.URL, "jdbc:mysql://localhost:3306/katapp");
+            properties.put(Environment.USER, "root");
+            properties.put(Environment.PASS, "root");
+            properties.put(Environment.FORMAT_SQL, "true");
+            properties.put(Environment.SHOW_SQL, "true");
+            properties.put(Environment.HBM2DDL_AUTO, "none");
+            properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+
             sessionFactory = new Configuration().setProperties(properties)
                     .addAnnotatedClass(User.class)
                     .buildSessionFactory();
