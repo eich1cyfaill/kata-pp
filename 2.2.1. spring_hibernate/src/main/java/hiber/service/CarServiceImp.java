@@ -18,7 +18,7 @@ public class CarServiceImp {
         carDaoImp.add(car);
     }
 
-    public User getCarOwner(int series) {
-        return carDaoImp.getCarOwner(series);
+    public User getCarOwner(int series, String model) {
+        return carDaoImp.getCarOwner(series, model);
     }
 }

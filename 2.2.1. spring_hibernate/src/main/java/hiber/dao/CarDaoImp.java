@@ -24,11 +24,12 @@ public class CarDaoImp {
         }
     }
 
-    public User getCarOwner(int series) {
+    public User getCarOwner(int series, String model) {
         Session session = sessionFactory.openSession();
         try (session) {
-            TypedQuery<Car> query = session.createQuery("from Car where series = :series");
+            TypedQuery<Car> query = session.createQuery("from Car where series = :series and model = :model");
             query.setParameter("series", series);
+            query.setParameter("model", model);
             User user = query.getSingleResult().getUser();
             return user;
         } catch (NoResultException e) {
