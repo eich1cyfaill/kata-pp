@@ -21,8 +21,4 @@ public class CarServiceImp {
     public User getCarOwner(int series) {
         return carDaoImp.getCarOwner(series);
     }
-
-    public List<Car> getCars() {
-        return carDaoImp.getCars();
-    }
 }

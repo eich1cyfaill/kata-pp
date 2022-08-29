@@ -7,8 +7,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 @Repository
 public class CarDaoImp {
@@ -29,12 +29,10 @@ public class CarDaoImp {
         try (session) {
             TypedQuery<Car> query = session.createQuery("from Car where series = :series");
             query.setParameter("series", series);
-            return query.getSingleResult().getUser();
+            User user = query.getSingleResult().getUser();
+            return user;
+        } catch (NoResultException e) {
+            return null;
         }
-    }
-
-    public List<Car> getCars() {
-        TypedQuery<Car> query = sessionFactory.getCurrentSession().createQuery("from Car");
-        return query.getResultList();
     }
 }

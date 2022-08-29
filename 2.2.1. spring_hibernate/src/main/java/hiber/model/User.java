@@ -23,8 +23,6 @@ public class User {
    @JoinColumn(name = "car_id", referencedColumnName = "series")
    private Car car;
 
-
-
    public User() {}
    
    public User(String firstName, String lastName, String email, Car car) {
