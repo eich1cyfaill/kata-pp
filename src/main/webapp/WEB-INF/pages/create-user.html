@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating User</title>
+</head>
+<body style="display:flex; justify-content: center; align-items: center; flex-direction: column; height: 70vh">
+    <p><a href="/" style="text-decoration: none">Back to list</a></p>
+    <form th:action="@{/create}" th:method="post" th:object="${user}" style="border: 1px solid greenyellow; border-radius: 15px; padding: 30px 15px">
+        <div>
+            <input type="text" name="name" placeholder="name..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+        </div>
+        <div>
+            <input type="text" name="lastName" placeholder="last name..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+        </div>
+        <div>
+            <input type="text" name="age" placeholder="age..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+        </div>
+        <div>
+            <input type="text" name="country" placeholder="country..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+        </div>
+        <div>
+            <button type="submit" style="background: greenyellow; outline: none; border: none; padding: 10px 15px; border-radius: 5px;">Create</button>
+        </div>
+    </form>
+</body>
+</html>

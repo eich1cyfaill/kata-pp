@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Updating User</title>
+</head>
+<body style="display:flex; justify-content: center; align-items: center; flex-direction: column; height: 70vh">
+    <p><a href="/" style="text-decoration: none">Back to list</a></p>
+    <form th:action="@{/update}" th:method="post" th:object="${user}" style="border: 1px solid greenyellow; border-radius: 15px; padding: 30px 15px">
+        <input type="hidden" name="id" th:value="${user.id}">
+          <div>
+              <p>Name: </p>
+              <input type="text" name="name" th:value="${user.name}" style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+          </div>
+          <div>
+              <p>Last name: </p>
+              <input type="text" name="lastName" th:value="${user.lastName}" style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+          </div>
+          <div>
+              <p>Age: </p>
+              <input type="text" name="age" th:value="${user.age}" style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+          </div>
+          <div>
+              <p>Country: </p>
+              <input type="text" name="country" th:value="${user.country}" style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+          </div>
+          <div>
+            <button type="submit" style="background: greenyellow; outline: none; border: none; padding: 10px 15px; border-radius: 5px">Update</button>
+          </div>
+    </form>
+</body>
+</html>
