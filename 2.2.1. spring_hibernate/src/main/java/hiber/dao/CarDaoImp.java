@@ -28,16 +28,4 @@ public class CarDaoImp implements CarDao {
             session.getTransaction().commit();
         }
     }
-
-    public User getCarOwner(int series, String model) {
-        Session session = sessionFactory.openSession();
-        try (session) {
-            TypedQuery<User> query = session.createQuery("from User where car.series = :car and car.model = :model");
-            query.setParameter("car", series);
-            query.setParameter("model", model);
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
 }
