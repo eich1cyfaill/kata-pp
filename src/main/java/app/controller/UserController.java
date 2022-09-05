@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -26,8 +23,7 @@ public class UserController {
 
     @GetMapping(value = "/")
     public String printWelcome(Model model) {
-        List<User> users = userService.getUserList();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.getUserList());
         return "index";
     }
 

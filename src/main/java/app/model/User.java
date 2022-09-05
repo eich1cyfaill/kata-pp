@@ -70,4 +70,33 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", country='" + country + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(getClass() != o.getClass() || o == null) return true;
+        return id.equals(((User) o).id)
+                && name.equals(((User) o).name)
+                && lastName.equals(((User) o).lastName)
+                && age == ((User) o).age
+                && country.equals(((User) o).country);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 29;
+        result = (name.hashCode() * lastName.hashCode() * country.hashCode() * (int)(id - (id >>> 32))) * result;
+        return 29 * result + age;
+    }
 }
