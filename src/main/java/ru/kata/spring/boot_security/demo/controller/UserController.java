@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/user")
     public String getUserInfo(Principal principal, Model model) {
-        model.addAttribute(principal);
+        model.addAttribute("user", principal);
         return "user_info";
     }
 
@@ -67,7 +67,8 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    public String getAdminPage() {
+    public String getAdminPage(Model model) {
+        model.addAttribute("users", userService.getUserList());
         return "admin";
     }
 }

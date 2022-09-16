@@ -13,6 +13,7 @@ public interface UserDao {
 
     User getOneUser(Long id);
 
+    boolean checkIfUserExists(String username);
     User findByUsername(String username);
 
 }

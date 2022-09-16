@@ -1,12 +1,11 @@
 package ru.kata.spring.boot_security.demo.entities;
 
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -30,9 +29,19 @@ public class User implements UserDetails {
 
 
 
+    public User(Long id, String name, String lastName, int age, String country, Set<Role> roles, String username, String password, boolean isEnabled) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.country = country;
+        this.roles = roles;
+        this.username = username;
+        this.password = password;
+        this.isEnabled = isEnabled;
+    }
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -54,6 +63,7 @@ public class User implements UserDetails {
 
     public User() {}
 
+    @Autowired
     public User(String name, String lastName, int age, String country) {
         this.name = name;
         this.lastName = lastName;
@@ -91,7 +101,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<Role> getAuthorities() {
         return roles;
     }
 
@@ -143,5 +153,41 @@ public class User implements UserDetails {
 
     public String getCountry() {
         return country;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }

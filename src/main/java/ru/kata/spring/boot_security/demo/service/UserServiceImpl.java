@@ -7,13 +7,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.kata.spring.boot_security.demo.configs.PasswordEncoderHolder;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repository.UserDao;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -21,10 +21,14 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserDao userDao;
+    private final PasswordEncoderHolder passwordEncoderHolder;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserDao adminDao) {
+    public UserServiceImpl(UserDao adminDao, PasswordEncoderHolder passwordEncoderHolder, RoleRepository roleRepository) {
         this.userDao = adminDao;
+        this.passwordEncoderHolder = passwordEncoderHolder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -35,6 +39,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void addUser(User user) {
+        if (userDao.checkIfUserExists(user.getUsername())) {
+            throw new RuntimeException(
+                    "There is an account with that username:" + user.getUsername());
+        }
+
+        user.setPassword(passwordEncoderHolder.passwordEncoder().encode(user.getPassword()));
+        List<Role> roleList = Arrays.asList(roleRepository.getRoleById(1L));
+        user.setEnabled(true);
+        user.setRoles(new HashSet<>(roleList));
         userDao.addUser(user);
     }
 

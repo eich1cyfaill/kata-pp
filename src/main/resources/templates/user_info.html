@@ -4,7 +4,10 @@
     <title>Spring Security Example</title>
 </head>
 <body>
+<button style="margin: 10px 0; background: greenyellow; outline: none; border: none; padding: 10px 15px; border-radius: 10px;">
+    <a href="/logout" style="text-decoration: none">Logout</a>
+</button>
 <h1>User info</h1>
-
+<div th:text="${user.name}"></div>
 </body>
 </html>
