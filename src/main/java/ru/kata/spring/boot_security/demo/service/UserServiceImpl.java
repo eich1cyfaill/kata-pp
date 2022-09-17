@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.configs.PasswordEncoderHolder;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserDao;
 
 import javax.transaction.Transactional;
@@ -22,13 +23,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserDao userDao;
     private final PasswordEncoderHolder passwordEncoderHolder;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UserDao adminDao, PasswordEncoderHolder passwordEncoderHolder, RoleRepository roleRepository) {
+    public UserServiceImpl(UserDao adminDao, PasswordEncoderHolder passwordEncoderHolder, RoleService roleService) {
         this.userDao = adminDao;
         this.passwordEncoderHolder = passwordEncoderHolder;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     @Override
@@ -43,9 +44,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new RuntimeException(
                     "There is an account with that username:" + user.getUsername());
         }
-
         user.setPassword(passwordEncoderHolder.passwordEncoder().encode(user.getPassword()));
-        List<Role> roleList = Arrays.asList(roleRepository.getRoleById(1L));
+        List<Role> roleList = user.getRoles()
+                .stream()
+                .map(r -> roleService.getRoleByName(r.getName()))
+                .collect(Collectors.toList());
         user.setEnabled(true);
         user.setRoles(new HashSet<>(roleList));
         userDao.addUser(user);
@@ -60,6 +63,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void updateUser(User user) {
+        user.setPassword(passwordEncoderHolder.passwordEncoder().encode(user.getPassword()));
+        List<Role> roleList = user.getRoles()
+                .stream()
+                .map(r -> roleService.getRoleByName(r.getName()))
+                .collect(Collectors.toList());
+        user.setEnabled(true);
+        user.setRoles(new HashSet<>(roleList));
         userDao.updateUser(user);
     }
 

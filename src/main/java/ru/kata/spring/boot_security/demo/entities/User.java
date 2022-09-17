@@ -155,6 +155,8 @@ public class User implements UserDetails {
         return country;
     }
 
+    public Set<Role> getRoles() { return roles; }
+
     public void setId(Long id) {
         this.id = id;
     }

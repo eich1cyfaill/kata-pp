@@ -2,6 +2,12 @@ package ru.kata.spring.boot_security.demo.service;
 
 import ru.kata.spring.boot_security.demo.entities.Role;
 
-public interface RoleRepository {
+import java.util.List;
+
+public interface RoleService {
+    List<Role> getAllRolesList();
+
+    Role getRoleByName(String name);
+
     Role getRoleById(Long id);
 }

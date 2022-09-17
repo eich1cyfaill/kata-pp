@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.entities.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
@@ -17,10 +18,12 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
 
@@ -38,6 +41,7 @@ public class UserController {
 
     @GetMapping("/create")
     public String createUserPage(Model model) {
+        model.addAttribute("roles", roleService.getAllRolesList());
         model.addAttribute("user", new User());
         return "create-user";
     }
@@ -50,6 +54,7 @@ public class UserController {
 
     @GetMapping("/update")
     public String updateUserPage(@RequestParam(value="id") Long id, Model model) {
+        model.addAttribute("roles", roleService.getAllRolesList());
         model.addAttribute("user", userService.getOneUser(id));
         return "update-user";
     }
