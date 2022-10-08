@@ -10,12 +10,10 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.configs.PasswordEncoderHolder;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserDao;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -23,13 +21,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserDao userDao;
     private final PasswordEncoderHolder passwordEncoderHolder;
-    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UserDao adminDao, PasswordEncoderHolder passwordEncoderHolder, RoleService roleService) {
+    public UserServiceImpl(UserDao adminDao, PasswordEncoderHolder passwordEncoderHolder) {
         this.userDao = adminDao;
         this.passwordEncoderHolder = passwordEncoderHolder;
-        this.roleService = roleService;
     }
 
     @Override
@@ -80,19 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-
-        User user = this.findByUsername(username);
-        if(user == null) {
-            throw new UsernameNotFoundException(String.format("User %s not found", username));
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), mapRolesToAuthorities(user.getAuthorities()));
-
+        return this.findByUsername(username);
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<? extends GrantedAuthority> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
-    }
 }
