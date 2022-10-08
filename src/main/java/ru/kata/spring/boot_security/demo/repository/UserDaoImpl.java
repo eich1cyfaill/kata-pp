@@ -1,17 +1,11 @@
 package ru.kata.spring.boot_security.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -41,7 +35,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(User user) {
-        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
+        entityManager.remove(entityManager.merge(user));
     }
 
     @Override
@@ -67,7 +61,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByUsername(String username) {
-        TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("select * from User where username = :username", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select u from User u join fetch u.roles where u.username = :username", User.class);
         query.setParameter("username", username);
         return query.getSingleResult();
     }

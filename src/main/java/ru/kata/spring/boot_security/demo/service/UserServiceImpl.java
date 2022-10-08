@@ -39,19 +39,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void addUser(User user) {
+    public void addUser(User user, List<Role> updatedRoles) {
         if (userDao.checkIfUserExists(user.getUsername())) {
             throw new RuntimeException(
                     "There is an account with that username:" + user.getUsername());
         }
-        user.setPassword(passwordEncoderHolder.passwordEncoder().encode(user.getPassword()));
-        List<Role> roleList = user.getRoles()
-                .stream()
-                .map(r -> roleService.getRoleByName(r.getName()))
-                .collect(Collectors.toList());
-        user.setEnabled(true);
-        user.setRoles(new HashSet<>(roleList));
+        encodePassword(user);
+        user.setRoles(updatedRoles);
         userDao.addUser(user);
+    }
+
+    private void encodePassword(User user) {
+        user.setPassword(passwordEncoderHolder.passwordEncoder().encode(user.getPassword()));
     }
 
     @Override
@@ -62,14 +61,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void updateUser(User user) {
-        user.setPassword(passwordEncoderHolder.passwordEncoder().encode(user.getPassword()));
-        List<Role> roleList = user.getRoles()
-                .stream()
-                .map(r -> roleService.getRoleByName(r.getName()))
-                .collect(Collectors.toList());
+    public void updateUser(User user, List<Role> roles) {
+        encodePassword(user);
         user.setEnabled(true);
-        user.setRoles(new HashSet<>(roleList));
+        user.setRoles(roles);
         userDao.updateUser(user);
     }
 
@@ -85,6 +80,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+
         User user = this.findByUsername(username);
         if(user == null) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
@@ -92,6 +89,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), mapRolesToAuthorities(user.getAuthorities()));
+
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<? extends GrantedAuthority> roles) {

@@ -1,18 +1,19 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -26,10 +27,30 @@ public class UserController {
         this.roleService = roleService;
     }
 
+    @RequestMapping("/login.html")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping("/login-error.html")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "login";
+    }
+
+    @RequestMapping("/logout")
+    public String logout() {
+        return "logout";
+    }
 
     @GetMapping("/user")
     public String getUserInfo(Principal principal, Model model) {
-        model.addAttribute("user", principal);
+        model.addAttribute("principal", principal);
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        model.addAttribute("currentroles", SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .map(r -> r.toString().replaceAll("ROLE_", ""))
+                .collect(Collectors.toList()));
         return "user_info";
     }
 
@@ -40,40 +61,48 @@ public class UserController {
     }
 
     @GetMapping("/create")
-    public String createUserPage(Model model) {
+    public String createUserPage(Model model, Principal principal) {
         model.addAttribute("roles", roleService.getAllRolesList());
         model.addAttribute("user", new User());
+        model.addAttribute("principal", principal);
+        model.addAttribute("currentroles", SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .map(r -> r.toString().replaceAll("ROLE_", ""))
+                .collect(Collectors.toList()));
         return "create-user";
     }
 
     @PostMapping("/create")
-    public ModelAndView createUser(@ModelAttribute("user") User user) {
-        userService.addUser(user);
+    public ModelAndView createUser(@ModelAttribute("user") User user, @RequestParam("roles") List<Role> roles) {
+        List<Role> updatedRoles = roles.stream().map(r -> roleService.getRoleByName(r.getName())).collect(Collectors.toList());
+        userService.addUser(user, updatedRoles);
         return new ModelAndView("redirect:/");
     }
 
-    @GetMapping("/update")
-    public String updateUserPage(@RequestParam(value="id") Long id, Model model) {
-        model.addAttribute("roles", roleService.getAllRolesList());
-        model.addAttribute("user", userService.getOneUser(id));
-        return "update-user";
-    }
 
     @PostMapping("/update")
-    public ModelAndView updateUser(@ModelAttribute("user") User user) {
-        userService.updateUser(user);
-        return new ModelAndView("redirect:/");
+    public ModelAndView updateUser(@ModelAttribute("user") User user, @RequestParam("roles") List<Role> roles) {
+        List<Role> updatedRoles = roles.stream().map(r -> roleService.getRoleByName(r.getName())).collect(Collectors.toList());
+        userService.updateUser(user, updatedRoles);
+        return new ModelAndView("redirect:/admin");
     }
 
     @PostMapping("/delete")
     public ModelAndView deleteUser(@ModelAttribute("user") User user) {
         userService.deleteUser(user);
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/admin");
     }
 
     @GetMapping("/admin")
-    public String getAdminPage(Model model) {
+    public String getAdminPage(Model model, Principal principal) {
+        model.addAttribute("principal", principal);
+        model.addAttribute("currentroles", SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .map(r -> r.toString().replaceAll("ROLE_", ""))
+                .collect(Collectors.toList()));
         model.addAttribute("users", userService.getUserList());
+        model.addAttribute("roles", roleService.getAllRolesList());
+        model.addAttribute("user", new User());
         return "admin";
     }
 }

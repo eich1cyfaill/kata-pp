@@ -2,41 +2,78 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Creating User</title>
 </head>
-<body style="display:flex; justify-content: center; align-items: center; flex-direction: column; height: 70vh">
-<div th:insert="header.html :: header"></div>
-    <p><a href="/" style="text-decoration: none">Back to list</a></p>
-    <form th:action="@{/create}" th:method="post" th:object="${user}" style="border: 1px solid greenyellow; border-radius: 15px; padding: 30px 15px">
-        <div>
-            <input type="text" name="username" placeholder="username..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
+<body>
+<div th:insert="header.html :: header (${principal}, ${currentroles})"></div>
+    <main class="container-fluid">
+        <div class="row">
+            <nav class="nav nav-pills nav-fill col-2" style="display: flex; flex-direction: column;">
+                <a href="/admin" class="active nav-link">Admin</a>
+                <a href="/user" class="nav-link">User</a>
+            </nav>
+
+            <div class="col container-fluid" style="margin: 0; padding: 10px">
+                <h1>Admin panel</h1>
+                <nav style="display: flex">
+                    <div class="border" style="padding: 5px 15px; border-bottom: none">
+                        <a href="/admin" style="text-decoration: none; color: #343a40">User table</a>
+                    </div>
+                    <div class="border" style="padding: 5px 15px; border-bottom: none">
+                        <a href="/create" style="text-decoration: none">New user</a>
+                    </div>
+                </nav>
+
+                <div class="border" style="font-weight: 500; padding: 10px 20px; font-size: 24px;">Add new user</div>
+
+                <div class="container border" style="width: 25%">
+                    <form th:action="@{/create(roles=${user.roles})}" th:method="post" th:object="${user}">
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <b>Username</b>
+                            <input type="text" name="username" class="form-control" placeholder="username...">
+                        </div>
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <b>Password</b>
+                            <input type="text" name="password" class="form-control" placeholder="password...">
+                        </div>
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <b>First name</b>
+                            <input type="text" name="name" class="form-control" placeholder="name...">
+                        </div>
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <b>Second name</b>
+                            <input type="text" name="lastName" class="form-control" placeholder="last name...">
+                        </div>
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <b>Age</b>
+                            <input type="number" name="age" class="form-control" placeholder="age...">
+                        </div>
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <b>Country</b>
+                            <input type="text" name="country" class="form-control" placeholder="country...">
+                        </div>
+                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
+                            <select class="form-select" th:field="${user.roles}" multiple aria-label="multiple select example" style="width: 100%; margin-top: 10px">
+                                <option th:each="role : ${roles}"
+                                        th:text="${role.name}"
+                                        th:value="${role.name}">Test</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; justify-content: center; align-items: center">
+                            <button type="submit" class="btn btn-success">Add new user</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <input type="text" name="password" placeholder="password..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
-        </div>
-        <div>
-            <input type="text" name="name" placeholder="name..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
-        </div>
-        <div>
-            <input type="text" name="lastName" placeholder="last name..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
-        </div>
-        <div>
-            <input type="text" name="age" placeholder="age..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
-        </div>
-        <div>
-            <input type="text" name="country" placeholder="country..." style="border-radius: 5px; border: 1px solid greenyellow; font-size: 17px; padding: 0 15px; margin: 3px 0">
-        </div>
-        <div>
-            <ul th:each="role : ${roles}">
-                <li>
-                    <input type="checkbox" th:field="${user.roles}"
-                           th:text="${role.name}" th:value="${role.name}"/>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <button type="submit" style="background: greenyellow; outline: none; border: none; padding: 10px 15px; border-radius: 5px;">Create</button>
-        </div>
-    </form>
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
 </body>
 </html>

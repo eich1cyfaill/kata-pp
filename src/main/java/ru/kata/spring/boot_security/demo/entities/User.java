@@ -24,30 +24,27 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "country")
-    private String country;
 
 
 
-    public User(Long id, String name, String lastName, int age, String country, Set<Role> roles, String username, String password, boolean isEnabled) {
+    public User(Long id, String name, String lastName, int age, List<Role> roles, String username, String password, boolean isEnabled) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.country = country;
         this.roles = roles;
         this.username = username;
         this.password = password;
         this.isEnabled = isEnabled;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
     @Column
     private String username;
@@ -63,12 +60,13 @@ public class User implements UserDetails {
 
     public User() {}
 
+
+
     @Autowired
-    public User(String name, String lastName, int age, String country) {
+    public User(String name, String lastName, int age) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.country = country;
     }
 
     @Override
@@ -78,7 +76,6 @@ public class User implements UserDetails {
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
-                ", country='" + country + '\'' +
                 '}';
     }
 
@@ -89,14 +86,13 @@ public class User implements UserDetails {
         return id.equals(((User) o).id)
                 && name.equals(((User) o).name)
                 && lastName.equals(((User) o).lastName)
-                && age == ((User) o).age
-                && country.equals(((User) o).country);
+                && age == ((User) o).age;
     }
 
     @Override
     public int hashCode() {
         int result = 29;
-        result = (name.hashCode() * lastName.hashCode() * country.hashCode() * (int)(id - (id >>> 32))) * result;
+        result = (name.hashCode() * lastName.hashCode() * (int)(id - (id >>> 32))) * result;
         return 29 * result + age;
     }
 
@@ -135,6 +131,10 @@ public class User implements UserDetails {
         return isEnabled;
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     public Long getId() {
         return id;
     }
@@ -151,11 +151,7 @@ public class User implements UserDetails {
         return age;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public Set<Role> getRoles() { return roles; }
+    public List<Role> getRoles() { return roles; }
 
     public void setId(Long id) {
         this.id = id;
@@ -173,11 +169,8 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.repository;
 
 import ru.kata.spring.boot_security.demo.entities.User;
 
+import javax.persistence.Query;
 import java.util.List;
 
 public interface UserDao {

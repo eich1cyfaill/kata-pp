@@ -1,11 +1,62 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>User info</title>
 </head>
 <body>
-<div th:insert="header.html :: header"></div>
-<h1>User info</h1>
-<div th:text="${user.name}"></div>
+<div th:insert="header.html :: header (${principal}, ${currentroles})"></div>
+    <main class="container-fluid">
+        <div class="row">
+            <nav class="nav nav-pills nav-fill col-2" style="display: flex; flex-direction: column;">
+                <div>
+                    <a href="/admin" class="nav-link">Admin</a>
+                </div>
+                <div>
+                    <a href="/user" class="active nav-link">User</a>
+                </div>
+
+            </nav>
+
+            <div class="col container-fluid" style="margin: 0; padding: 10px">
+                <h1>User information page</h1>
+
+                <div class="border" style="font-weight: 500; padding: 10px 20px; font-size: 24px;">About user</div>
+
+                <div class="container-fluid border">
+                    <div class="row border-top" style="font-weight: 500; margin: 20px 0">
+                        <div class="col">ID</div>
+                        <div class="col">First Name</div>
+                        <div class="col">Last name</div>
+                        <div class="col">Age</div>
+                        <div class="col">Username</div>
+                        <div class="col">Role</div>
+                    </div>
+
+                    <div class="border-top row" style="margin: 20px 0">
+                        <p th:text="${user.id}" class="col"></p>
+                        <p th:text="${user.name}" class="col">Test</p>
+                        <p th:text="${user.lastName}" class="col">Test</p>
+                        <p th:text="${user.age}" class="col">20</p>
+                        <p th:text="${user.username}" class="col"></p>
+
+                        <div class="col" style="display: flex">
+                            <div th:each="role : ${user.roles}" style="margin: 0 5px 0 0">
+                                <p th:text="${role}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
 </html>
