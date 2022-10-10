@@ -73,17 +73,15 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ModelAndView createUser(@ModelAttribute("user") User user, @RequestParam("roles") List<Role> roles) {
-        List<Role> updatedRoles = roles.stream().map(r -> roleService.getRoleByName(r.getName())).collect(Collectors.toList());
-        userService.addUser(user, updatedRoles);
+    public ModelAndView createUser(@ModelAttribute("user") User user) {
+        userService.addUser(user);
         return new ModelAndView("redirect:/");
     }
 
 
     @PostMapping("/update")
-    public ModelAndView updateUser(@ModelAttribute("user") User user, @RequestParam("roles") List<Role> roles) {
-        List<Role> updatedRoles = roles.stream().map(r -> roleService.getRoleByName(r.getName())).collect(Collectors.toList());
-        userService.updateUser(user, updatedRoles);
+    public ModelAndView updateUser(@ModelAttribute("user") User user) {
+        userService.updateUser(user);
         return new ModelAndView("redirect:/admin");
     }
 
@@ -100,9 +98,9 @@ public class UserController {
                 .getAuthorities().stream()
                 .map(r -> r.toString().replaceAll("ROLE_", ""))
                 .collect(Collectors.toList()));
-        model.addAttribute("users", userService.getUserList());
         model.addAttribute("roles", roleService.getAllRolesList());
         model.addAttribute("user", new User());
+        model.addAttribute("users", userService.getUserList());
         return "admin";
     }
 }

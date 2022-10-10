@@ -1,8 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,8 +8,9 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.configs.PasswordEncoderHolder;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.repository.UserDao;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -19,30 +18,29 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final PasswordEncoderHolder passwordEncoderHolder;
 
     @Autowired
-    public UserServiceImpl(UserDao adminDao, PasswordEncoderHolder passwordEncoderHolder) {
-        this.userDao = adminDao;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoderHolder passwordEncoderHolder) {
+        this.userRepository = userRepository;
         this.passwordEncoderHolder = passwordEncoderHolder;
     }
 
     @Override
     public List<User> getUserList() {
-        return userDao.getUserList();
+        return userRepository.findAll();
     }
 
     @Override
     @Transactional
-    public void addUser(User user, List<Role> updatedRoles) {
-        if (userDao.checkIfUserExists(user.getUsername())) {
+    public void addUser(User user) {
+        if (this.checkIfUserExists(user.getUsername())) {
             throw new RuntimeException(
                     "There is an account with that username:" + user.getUsername());
         }
         encodePassword(user);
-        user.setRoles(updatedRoles);
-        userDao.addUser(user);
+        userRepository.saveAndFlush(user);
     }
 
     private void encodePassword(User user) {
@@ -52,31 +50,40 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void deleteUser(User user) {
-        userDao.deleteUser(user);
+        userRepository.delete(user);
     }
 
     @Override
     @Transactional
-    public void updateUser(User user, List<Role> roles) {
+    public void updateUser(User user) {
         encodePassword(user);
         user.setEnabled(true);
-        user.setRoles(roles);
-        userDao.updateUser(user);
+        userRepository.saveAndFlush(user);
     }
 
     @Override
     @Transactional
     public User getOneUser(Long id) {
-        return userDao.getOneUser(id);
+        return userRepository.getById(id);
     }
 
     public User findByUsername(String username) {
-        return userDao.findByUsername(username);
+        return userRepository.findByName(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.findByUsername(username);
+    }
+
+    @Override
+    public boolean checkIfUserExists(String username) {
+        try {
+            User user = userRepository.findByName(username);
+            return user != null;
+        } catch (NoResultException e) {
+            return false;
+        }
     }
 
 }

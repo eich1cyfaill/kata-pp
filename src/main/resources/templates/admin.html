@@ -88,7 +88,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
-                    <form th:action="@{/update(roles=${user.roles})}" th:method="post" th:object="${user}" style="margin: 30px 0">
+                    <form th:action="@{/update}" th:method="post" th:object="${user}" style="margin: 30px 0">
 
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
@@ -124,7 +124,7 @@
                                 <select class="form-select" th:field="${user.roles}" multiple aria-label="multiple select example" style="width: 100%; margin-top: 10px">
                                     <option th:each="role : ${roles}"
                                             th:text="${role.name}"
-                                            th:value="${role.name}">Test</option>
+                                            th:value="${role.id}">Test</option>
                                 </select>
                             </div>
 

@@ -28,7 +28,7 @@
                 <div class="border" style="font-weight: 500; padding: 10px 20px; font-size: 24px;">Add new user</div>
 
                 <div class="container border" style="width: 25%">
-                    <form th:action="@{/create(roles=${user.roles})}" th:method="post" th:object="${user}">
+                    <form th:action="@{/create}" th:method="post" th:object="${user}">
                         <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
                             <b>Username</b>
                             <input type="text" name="username" class="form-control" placeholder="username...">
@@ -50,14 +50,10 @@
                             <input type="number" name="age" class="form-control" placeholder="age...">
                         </div>
                         <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
-                            <b>Country</b>
-                            <input type="text" name="country" class="form-control" placeholder="country...">
-                        </div>
-                        <div class="mb-1" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px">
                             <select class="form-select" th:field="${user.roles}" multiple aria-label="multiple select example" style="width: 100%; margin-top: 10px">
                                 <option th:each="role : ${roles}"
                                         th:text="${role.name}"
-                                        th:value="${role.name}">Test</option>
+                                        th:value="${role.id}">Test</option>
                             </select>
                         </div>
                         <div style="display: flex; justify-content: center; align-items: center">

@@ -9,11 +9,10 @@ import java.util.List;
 public interface UserService {
 
         List<User> getUserList();
-        void addUser(User user, List<Role> updatedRoles);
+        void addUser(User user);
         void deleteUser(User user);
-        void updateUser(User user, List<Role> roles);
-
+        void updateUser(User user);
         User getOneUser(Long id);
-
         User findByUsername(String username);
+        boolean checkIfUserExists(String username);
 }
