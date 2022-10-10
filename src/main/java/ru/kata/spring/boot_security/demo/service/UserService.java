@@ -12,7 +12,6 @@ public interface UserService {
         void addUser(User user);
         void deleteUser(User user);
         void updateUser(User user);
-        User getOneUser(Long id);
         User findByUsername(String username);
         boolean checkIfUserExists(String username);
 }

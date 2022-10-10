@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.configs.PasswordEncoderHolder;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
@@ -61,11 +60,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.saveAndFlush(user);
     }
 
-    @Override
-    @Transactional
-    public User getOneUser(Long id) {
-        return userRepository.getById(id);
-    }
 
     public User findByUsername(String username) {
         return userRepository.findByName(username);

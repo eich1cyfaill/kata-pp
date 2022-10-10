@@ -75,7 +75,7 @@ public class UserController {
     @PostMapping("/create")
     public ModelAndView createUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/admin");
     }
 
 
