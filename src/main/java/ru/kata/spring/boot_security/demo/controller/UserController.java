@@ -56,39 +56,17 @@ public class UserController {
 
     @GetMapping(value = "/")
     public String printWelcome(Model model) {
-        model.addAttribute("users", userService.getUserList());
         return "index";
     }
 
     @GetMapping("/create")
     public String createUserPage(Model model, Principal principal) {
-        model.addAttribute("roles", roleService.getAllRolesList());
-        model.addAttribute("user", new User());
         model.addAttribute("principal", principal);
         model.addAttribute("currentroles", SecurityContextHolder.getContext().getAuthentication()
                 .getAuthorities().stream()
                 .map(r -> r.toString().replaceAll("ROLE_", ""))
                 .collect(Collectors.toList()));
         return "create-user";
-    }
-
-    @PostMapping("/create")
-    public ModelAndView createUser(@ModelAttribute("user") User user) {
-        userService.addUser(user);
-        return new ModelAndView("redirect:/admin");
-    }
-
-
-    @PostMapping("/update")
-    public ModelAndView updateUser(@ModelAttribute("user") User user) {
-        userService.updateUser(user);
-        return new ModelAndView("redirect:/admin");
-    }
-
-    @PostMapping("/delete")
-    public ModelAndView deleteUser(@ModelAttribute("user") User user) {
-        userService.deleteUser(user);
-        return new ModelAndView("redirect:/admin");
     }
 
     @GetMapping("/admin")
@@ -98,9 +76,6 @@ public class UserController {
                 .getAuthorities().stream()
                 .map(r -> r.toString().replaceAll("ROLE_", ""))
                 .collect(Collectors.toList()));
-        model.addAttribute("roles", roleService.getAllRolesList());
-        model.addAttribute("user", new User());
-        model.addAttribute("users", userService.getUserList());
         return "admin";
     }
 }

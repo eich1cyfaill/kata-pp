@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script defer th:src="@{/js/index.js}" type="text/javascript"></script>
     <title>Main page</title>
 </head>
 <body>
@@ -28,55 +29,19 @@
 
                 <div class="border" style="font-weight: 500; padding: 10px 20px; font-size: 24px;">All users</div>
 
-                <div class="container-fluid border">
-                    <div class="row border-top" style="font-weight: 500; margin: 20px 0">
-                        <div class="col">ID</div>
-                        <div class="col">First Name</div>
-                        <div class="col">Last name</div>
-                        <div class="col">Age</div>
-                        <div class="col">Username</div>
-                        <div class="col">Role</div>
-                        <div class="col">Edit</div>
-                        <div class="col">Delete</div>
-                    </div>
 
-                    <div th:each="user : ${users}" class="border-top row" style="margin: 20px 0">
-                        <p th:text="${user.id}" class="col"></p>
-                        <p th:text="${user.name}" class="col">Test</p>
-                        <p th:text="${user.lastName}" class="col">Test</p>
-                        <p th:text="${user.age}" class="col">20</p>
-                        <p th:text="${user.username}" class="col"></p>
+                <div class="row border-top" style="font-weight: 500; margin: 20px 0">
+                    <div class="col">ID</div>
+                    <div class="col">First Name</div>
+                    <div class="col">Last name</div>
+                    <div class="col">Age</div>
+                    <div class="col">Username</div>
+                    <div class="col">Role</div>
+                    <div class="col">Edit</div>
+                    <div class="col">Delete</div>
+                </div>
 
-                        <div class="col" style="display: flex">
-                            <div th:each="role : ${user.roles}" style="margin: 0 5px 0 0">
-                                <p th:text="${role}"></p>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <button class="btn btn-info" style="outline: none; background: #17A2B8"
-                                    data-toggle="modal"
-                                    th:attr="data-target=${'#exampleModal'+ user.id}"
-                                    data-row="${user}"
-                            >
-                                Edit
-                            </button>
-                        </div>
-
-                        <div class="col">
-                            <button class="btn btn-danger"
-                                    data-toggle="modal"
-                                    th:attr="data-target=${'#deleteModal'+ user.id}"
-                                    data-row="${user}"
-                            >
-                                Delete
-                            </button>
-                        </div>
-
-
-
-
-                    </div>
+                <div class="container-fluid border" id="usersHolder">
                 </div>
 
 
@@ -84,11 +49,11 @@
         </div>
 
 
-        <div th:each="user : ${users}" th:attr="id=${'exampleModal' + user.id}" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
-                    <form th:action="@{/update}" th:method="post" th:object="${user}" style="margin: 30px 0">
+                    <form style="margin: 30px 0">
 
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
@@ -99,32 +64,30 @@
 
                     <div class="modal-body">
 
-                            <input type="hidden" name="id" th:value="${user.id}">
+                            <input type="hidden" id="editModalId" name="id">
                             <div class="mb-1">
                                 <p>Username: </p>
-                                <input type="text" name="username" class="form-control" th:value="${user.username}" placeholder="username...">
+                                <input type="text" id="editModalUsername" name="username" class="form-control" placeholder="username...">
                             </div>
                             <div class="mb-1">
                                 <p>Password: </p>
-                                <input type="text" name="password" class="form-control" th:value="${user.password}" placeholder="password...">
+                                <input type="text" id="editModalPassword" name="password" class="form-control" placeholder="password...">
                             </div>
                             <div class="mb-1">
                                 <p>Name: </p>
-                                <input type="text" name="name" class="form-control" th:value="${user.name}">
+                                <input type="text" id="editModalName" name="name" class="form-control">
                             </div>
                             <div class="mb-1">
                                 <p>Last name: </p>
-                                <input type="text" name="lastName" class="form-control" th:value="${user.lastName}">
+                                <input type="text" id="editModalLastname" name="lastName" class="form-control">
                             </div>
                             <div class="mb-1">
                                 <p>Age: </p>
-                                <input type="number" name="age" class="form-control" th:value="${user.age}">
+                                <input type="number" id="editModalAge" name="age" class="form-control">
                             </div>
                             <div class="mb-1">
-                                <select class="form-select" th:field="${user.roles}" multiple aria-label="multiple select example" style="width: 100%; margin-top: 10px">
-                                    <option th:each="role : ${roles}"
-                                            th:text="${role.name}"
-                                            th:value="${role.id}">Test</option>
+                                <select class="form-select" id="editModalRoles" multiple aria-label="multiple select example" style="width: 100%; margin-top: 10px">
+
                                 </select>
                             </div>
 
@@ -132,7 +95,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Edit</button>
+                        <button type="button" id="editButton" class="btn btn-primary">Edit</button>
                     </div>
 
                     </form>
@@ -141,10 +104,10 @@
         </div>
 
 
-        <div th:each="user : ${users}" th:attr="id=${'deleteModal' + user.id}" class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form th:action="@{/delete}" th:method="post" th:object="${user}" class="col">
+                    <form class="col">
 
                         <div class="modal-header">
                             <h5 class="modal-title" id="deleteModalLabel">Delete user</h5>
@@ -154,15 +117,15 @@
                         </div>
 
                         <div class="modal-body">
-                                <input type="hidden" name="id" th:value="${user.id}">
-                                <input type="text" disabled class="form-control" name="name" th:value="${user.name}" style="margin: 10px 0">
-                                <input type="text" disabled class="form-control" name="lastName" th:value="${user.lastName}" style="margin: 10px 0">
-                                <input type="text" disabled class="form-control" name="age" th:value="${user.age}" style="margin: 10px 0">
+                                <input type="hidden" id="deleteModalId" name="id">
+                                <input type="text" id="deleteModalName" disabled class="form-control" name="name" style="margin: 10px 0">
+                                <input type="text" id="deleteModalLastname" disabled class="form-control" name="lastName" style="margin: 10px 0">
+                                <input type="text" id="deleteModalAge" disabled class="form-control" name="age" style="margin: 10px 0">
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" id="deleteButton" class="btn btn-danger">Delete</button>
                         </div>
 
                     </form>

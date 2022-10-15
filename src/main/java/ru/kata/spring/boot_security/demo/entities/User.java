@@ -38,6 +38,15 @@ public class User implements UserDetails {
         this.isEnabled = isEnabled;
     }
 
+    public User (String username, String password, String name, String lastName, int age, List<Role> roles) {
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.roles = roles;
+        this.username = username;
+        this.password = password;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",

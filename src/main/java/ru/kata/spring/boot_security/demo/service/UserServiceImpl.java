@@ -26,10 +26,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.passwordEncoderHolder = passwordEncoderHolder;
     }
 
+
     @Override
     public List<User> getUserList() {
         return userRepository.findAll();
     }
+
+
 
     @Override
     @Transactional
@@ -39,6 +42,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     "There is an account with that username:" + user.getUsername());
         }
         encodePassword(user);
+        user.setEnabled(true);
         userRepository.saveAndFlush(user);
     }
 
@@ -78,6 +82,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } catch (NoResultException e) {
             return false;
         }
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepository.findById(id).get();
     }
 
 }
