@@ -1,9 +1,6 @@
 package ru.kata.spring.boot_security.demo.entities;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -24,36 +21,13 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
-
-
-
-    public User(Long id, String name, String lastName, int age, List<Role> roles, String username, String password, boolean isEnabled) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-        this.roles = roles;
-        this.username = username;
-        this.password = password;
-        this.isEnabled = isEnabled;
-    }
-
-    public User (String username, String password, String name, String lastName, int age, List<Role> roles) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-        this.roles = roles;
-        this.username = username;
-        this.password = password;
-    }
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Column
     private String username;
@@ -67,11 +41,28 @@ public class User implements UserDetails {
 
 
 
+    public User(Long id, String name, String lastName, int age, Set<Role> roles, String username, String password, boolean isEnabled) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.roles = roles;
+        this.username = username;
+        this.password = password;
+        this.isEnabled = isEnabled;
+    }
+
+    public User (String username, String password, String name, String lastName, int age, Set<Role> roles) {
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.roles = roles;
+        this.username = username;
+        this.password = password;
+    }
+
     public User() {}
 
-
-
-    @Autowired
     public User(String name, String lastName, int age) {
         this.name = name;
         this.lastName = lastName;
@@ -160,7 +151,7 @@ public class User implements UserDetails {
         return age;
     }
 
-    public List<Role> getRoles() { return roles; }
+    public Set<Role> getRoles() { return roles; }
 
     public void setId(Long id) {
         this.id = id;
@@ -179,7 +170,7 @@ public class User implements UserDetails {
     }
 
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

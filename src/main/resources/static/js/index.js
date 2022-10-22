@@ -122,7 +122,7 @@ let fetchAllRoles = () => {
             value.forEach( r => {
                 let option = document.createElement("option")
                 option.append(r.name)
-                option.value = r.name
+                option.value = r.id
                 select.appendChild(option)
             })
         })
@@ -138,7 +138,7 @@ let pushUserToEdit = () => {
         debugger
         if(roleOptions[i].selected) {
             debugger
-            selectedRoles.push(roleOptions[i].value || roleOptions[i].text)
+            selectedRoles.push({ id: roleOptions[i].id, name: roleOptions[i].text})
         }
     }
 

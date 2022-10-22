@@ -20,7 +20,7 @@ let fetchAllRoles = () => {
             value.forEach( r => {
                 let option = document.createElement("option")
                 option.append(r.name)
-                option.value = r.name
+                option.value = r.id
                 select.appendChild(option)
             })
         })
@@ -34,7 +34,7 @@ let pushUser = (username, password, name, lastName, age, elem) => {
 
     for (let i = 0; i < roleOptions.length; i++) {
         if(roleOptions[i].selected) {
-            selectedRoles.push(roleOptions[i].value || roleOptions[i].text)
+            selectedRoles.push({ id: roleOptions[i].value, name: roleOptions[i].text})
         }
     }
 
