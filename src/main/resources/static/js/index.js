@@ -138,7 +138,7 @@ let pushUserToEdit = () => {
         debugger
         if(roleOptions[i].selected) {
             debugger
-            selectedRoles.push({ id: roleOptions[i].id, name: roleOptions[i].text})
+            selectedRoles.push({ id: roleOptions[i].value, name: roleOptions[i].text})
         }
     }
 

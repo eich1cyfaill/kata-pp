@@ -1,11 +1,14 @@
 package ru.kata.spring.boot_security.demo.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "user")
+@Data
 public class User implements UserDetails {
 
     @Id
