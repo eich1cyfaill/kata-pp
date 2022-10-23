@@ -1,11 +1,15 @@
 package ru.kata.spring.boot_security.demo.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "role")
+@Data
+@NoArgsConstructor
 public class Role implements GrantedAuthority {
 
     @Id
@@ -16,47 +20,13 @@ public class Role implements GrantedAuthority {
     private String name;
 
 
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Role(String name) {
-        this.name = name;
-    }
-
-    public Role(Long id) {
-        this.id = id;
-    }
-
-    public Role() {
-
-    }
-
-
     @Override
     public String getAuthority() {
         return "ROLE_" + this.getName();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
     @Override
     public String toString() {
         return name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
