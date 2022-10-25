@@ -7,7 +7,17 @@
     <title>Creating User</title>
 </head>
 <body id="body">
-<div th:insert="header.html :: header (${principal}, ${currentroles})"></div>
+<div class="container-fluid" style="background: #343a40; padding: 15px 10px; display: flex; justify-content: space-between; align-items: center">
+    <div style="display: flex; justify-content: space-between; color: lightgrey; align-items: center">
+        <p style="font-weight: bold; margin: 0 5px" id="headerUsername"></p>
+        <div> with roles: </div>
+        <div style="display: flex">
+            <p style="margin: 0 5px" id="headerRole"></p>
+        </div>
+    </div>
+
+    <a href="/logout" style="text-decoration: none; color: #8097A0">Logout</a>
+</div>
     <main class="container-fluid">
         <div class="row">
             <nav class="nav nav-pills nav-fill col-2" style="display: flex; flex-direction: column;">

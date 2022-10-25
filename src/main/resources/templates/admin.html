@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script defer th:src="@{/js/index.js}" type="text/javascript"></script>
+    <script defer th:src="@{/js/admin.js}" type="text/javascript"></script>
     <title>Main page</title>
 </head>
 <body>
 <div>
-    <div th:insert="header.html :: header (${principal}, ${currentroles})"></div>
+    <div class="container-fluid" style="background: #343a40; padding: 15px 10px; display: flex; justify-content: space-between; align-items: center">
+        <div style="display: flex; justify-content: space-between; color: lightgrey; align-items: center">
+            <p style="font-weight: bold; margin: 0 5px" id="headerUsername"></p>
+            <div> with roles: </div>
+            <div style="display: flex">
+                <p style="margin: 0 5px" id="headerRole"></p>
+            </div>
+        </div>
+
+        <a href="/logout" style="text-decoration: none; color: #8097A0">Logout</a>
+    </div>
     <main class="container-fluid">
         <div class="row">
             <nav class="nav nav-pills nav-fill col-2" style="display: flex; flex-direction: column;">

@@ -9,7 +9,6 @@
 
 <div class="container" style="width: 400px">
   <h1>Please sign in</h1>
-  <p th:if="${loginError}" class="error">Wrong user or password</p>
   <form th:action="@{/login.html}" method="post">
     <input type="text" id="username" name="username" class="form-control" autofocus="autofocus" placeholder="Username"/>
     <input type="password" class="form-control" id="password" name="password" placeholder="Password"/> <br />

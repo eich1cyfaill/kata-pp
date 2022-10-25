@@ -128,6 +128,21 @@ let fetchAllRoles = () => {
         })
 }
 
+let fetchPrincipal = () => {
+    fetch('http://localhost:3333/api/principal')
+        .then(res => {
+            return res.json()
+        })
+        .then(value => {
+            console.log(value)
+            document.getElementById('headerUsername').append(value.name)
+            value.authorities.forEach(a => {
+                document.getElementById('headerRole').append(a.name + " ")
+            })
+        })
+}
+
+
 let pushUserToEdit = () => {
 
     let selectedRoles = []
@@ -183,4 +198,5 @@ deleteButton.addEventListener('click', () => {
 
 window.onload = fetchAllRoles()
 window.onload = fetchingGuys()
+window.onload = fetchPrincipal()
 

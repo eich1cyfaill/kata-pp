@@ -26,6 +26,21 @@ let fetchAllRoles = () => {
         })
 }
 
+let fetchPrincipal = () => {
+    fetch('http://localhost:3333/api/principal')
+        .then(res => {
+            return res.json()
+        })
+        .then(value => {
+            console.log(value)
+            document.getElementById('headerUsername').append(value.name)
+            value.authorities.forEach(a => {
+                document.getElementById('headerRole').append(a.name + " ")
+            })
+        })
+}
+
+window.onblur = fetchPrincipal()
 window.onload = fetchAllRoles()
 
 let pushUser = (username, password, name, lastName, age, elem) => {

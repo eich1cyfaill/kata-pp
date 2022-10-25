@@ -10,7 +10,11 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/user").setViewName("user");
+        registry.addViewController("/user").setViewName("user_info");
+        registry.addViewController("/admin").setViewName("admin");
+        registry.addViewController("/login.html").setViewName("login");
+        registry.addViewController("/logout").setViewName("logout");
+        registry.addViewController("/create").setViewName("create-user");
     }
 
 }

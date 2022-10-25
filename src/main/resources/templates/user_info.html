@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script defer th:src="@{/js/user.js}" type="text/javascript"></script>
     <title>User info</title>
 </head>
 <body>
-<div th:insert="header.html :: header (${principal}, ${currentroles})"></div>
+<div class="container-fluid" style="background: #343a40; padding: 15px 10px; display: flex; justify-content: space-between; align-items: center">
+    <div style="display: flex; justify-content: space-between; color: lightgrey; align-items: center">
+        <p style="font-weight: bold; margin: 0 5px" id="headerUsername"></p>
+        <div> with roles: </div>
+        <div style="display: flex">
+            <p style="margin: 0 5px" id="headerRole"></p>
+        </div>
+    </div>
+
+    <a href="/logout" style="text-decoration: none; color: #8097A0">Logout</a>
+</div>
     <main class="container-fluid">
         <div class="row">
             <nav class="nav nav-pills nav-fill col-2" style="display: flex; flex-direction: column;">
@@ -35,15 +46,15 @@
                     </div>
 
                     <div class="border-top row" style="margin: 20px 0">
-                        <p th:text="${user.id}" class="col"></p>
-                        <p th:text="${user.name}" class="col">Test</p>
-                        <p th:text="${user.lastName}" class="col">Test</p>
-                        <p th:text="${user.age}" class="col">20</p>
-                        <p th:text="${user.username}" class="col"></p>
+                        <p class="col" id="userId"></p>
+                        <p class="col" id="userName"></p>
+                        <p class="col" id="userSurname"></p>
+                        <p class="col" id="userAge"></p>
+                        <p class="col" id="userUsername"></p>
 
                         <div class="col" style="display: flex">
-                            <div th:each="role : ${user.roles}" style="margin: 0 5px 0 0">
-                                <p th:text="${role}"></p>
+                            <div style="margin: 0 5px 0 0">
+                                <p id="userRole"></p>
                             </div>
                         </div>
                     </div>
