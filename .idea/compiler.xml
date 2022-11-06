@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="pp2.3.1" />
+        <module name="spring-boot_security-demo" />
       </profile>
     </annotationProcessing>
   </component>
